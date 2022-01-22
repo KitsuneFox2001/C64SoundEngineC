@@ -39,13 +39,29 @@ void sid_init() {
   SID.amp = 0xff;
 }
 
-#define SID_PULSE_DECAY(voice, period) \
+#define SID_PULSE1_DECAY(voice, period) \
   SID.voice.ctrl = 0x00; \
   SID.voice.freq = period; \
-  SID.voice.pw = 0x7f; \
-  SID.voice.ad = 0x48; \
-  SID.voice.sr = 0x48; \
-  SID.voice.ctrl = 0x21; \
+  SID.voice.pw = voi1_pw; \
+  SID.voice.ad = voi1_ad; \
+  SID.voice.sr = voi1_sr; \
+  SID.voice.ctrl = voi1_ctrl \
+  
+#define SID_PULSE2_DECAY(voice, period) \
+  SID.voice.ctrl = 0x00; \
+  SID.voice.freq = period; \
+  SID.voice.pw = voi2_pw; \
+  SID.voice.ad = voi2_ad; \
+  SID.voice.sr = voi2_sr; \
+  SID.voice.ctrl = voi2_ctrl \
+
+#define SID_PULSE3_DECAY(voice, period) \
+  SID.voice.ctrl = 0x00; \
+  SID.voice.freq = period; \
+  SID.voice.pw = voi3_pw; \
+  SID.voice.ad = voi3_ad; \
+  SID.voice.sr = voi3_sr; \
+  SID.voice.ctrl = voi3_ctrl \
 
 // music player logic
 
@@ -85,7 +101,7 @@ const char name6[] =   "Around the World             ";
 const char artist6[] = "ATC                          ";
 const char name7[] =   "Sweet Dreams                 ";
 const char artist7[] = "Eurythmics                   ";
-const char name8[] =   "I will Survive               ";
+const char name8[] =   "I Will Survive               ";
 const char artist8[] = "Gloria Gaynor                ";
 const char name9[] =   "Techno Syndrome              ";
 const char artist9[] = "The Immortals (Mortal Kombat)";
@@ -139,6 +155,21 @@ const byte * artist_names[] = {artist1, artist2, artist3, artist4, artist5, arti
 // stores jingle (one-shot) tune data - Game Over and Stage Clear is one shot
 const bool jingle[] = {false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, false,false};
 
+// store settings
+const byte transpose_tables[] = {0x01, 0x02, 0xFF, 0xFE, 0x02, 0x00, 0xFC, 0xFC, 0xFC, 0xFC, 0x00, 0x00, 0xFC, 0xFC, 0xFD, 0xFD, 0xFD, 0x00, 0xFD, 0xFF};
+const byte voi1_ctrl_tables[] = {0x21, 0x21, 0x21, 0x21, 0x21, 0x11, 0x51, 0x51, 0x51, 0x61, 0x51, 0x21, 0x61, 0x61, 0x21, 0x61, 0x21, 0x61, 0x21, 0x61};
+const byte voi1_pw_tables[] = {0x7C, 0x5C, 0x7C, 0x17, 0x7F, 0x7F, 0xB8, 0x15, 0x15, 0x5D, 0x76, 0xA3, 0xA3, 0xA3, 0xFF, 0x1E, 0x7F, 0x7F, 0x4D, 0x7F};
+const byte voi1_ad_tables[] = {0x19, 0x27, 0x19, 0x44, 0x48, 0x7C, 0x44, 0x6F, 0x6F, 0x38, 0x1A, 0x69, 0x69, 0x69, 0x39, 0x39, 0x48, 0x48, 0x0A, 0x64};
+const byte voi1_sr_tables[] = {0x47, 0x47, 0x47, 0x40, 0x48, 0x62, 0x82, 0x0B, 0x0B, 0x60, 0x60, 0x5C, 0x20, 0x20, 0x20, 0xA5, 0x48, 0x00, 0x4F, 0xA4};
+const byte voi2_ctrl_tables[] = {0x31, 0x21, 0x31, 0x11, 0x21, 0x5F, 0x61, 0x51, 0x51, 0x61, 0x41, 0x31, 0x31, 0x31, 0x21, 0x61, 0x21, 0x31, 0x21, 0x31};
+const byte voi2_pw_tables[] = {0x7F, 0x57, 0x7F, 0x7F, 0x7F, 0x7F, 0xB8, 0x15, 0x15, 0x5D, 0x76, 0xA3, 0xA3, 0xA3, 0x7F, 0x1E, 0x7F, 0x7F, 0x7F, 0x7F};
+const byte voi2_ad_tables[] = {0x15, 0x22, 0x15, 0x6C, 0x48, 0x42, 0x44, 0x6F, 0x6F, 0x38, 0x3A, 0x69, 0x69, 0x69, 0x39, 0x39, 0x48, 0x48, 0x0A, 0x0B};
+const byte voi2_sr_tables[] = {0xFD, 0x2C, 0xFD, 0x7A, 0x48, 0x48, 0x82, 0x0B, 0x0B, 0x60, 0x60, 0x5C, 0x20, 0x20, 0x10, 0xA5, 0x48, 0x00, 0x4F, 0x00};
+const byte voi3_ctrl_tables[] = {0x11, 0x31, 0x11, 0x11, 0x21, 0x21, 0x61, 0x51, 0x51, 0x61, 0x61, 0x11, 0x51, 0x51, 0x21, 0x61, 0x21, 0x61, 0x61, 0x31};
+const byte voi3_pw_tables[] = {0xFF, 0x4C, 0xFF, 0x2B, 0x5E, 0x41, 0x15, 0x15, 0x15, 0x1C, 0x1C, 0xA3, 0xA3, 0xA3, 0x7F, 0x1E, 0x7F, 0x7F, 0x7F, 0x7F};
+const byte voi3_ad_tables[] = {0x15, 0x1C, 0x15, 0xFF, 0x20, 0x3B, 0xFF, 0x6F, 0x6F, 0x1C, 0x1C, 0x69, 0x69, 0x69, 0x39, 0x39, 0x48, 0x1D, 0x0A, 0x0B};
+const byte voi3_sr_tables[] = {0xFD, 0x2B, 0xFD, 0x18, 0x17, 0x48, 0x0B, 0x0B, 0x0B, 0x1C, 0x1C, 0x48, 0x20, 0x00, 0x10, 0xA5, 0x48, 0x20, 0x4F, 0x00};
+
 const byte* music_ptr = music1;
 
 byte next_music_byte() {
@@ -155,17 +186,22 @@ void play_music() {
       // is this a note?
       if ((note & 0x80) == 0) {
         int period = NOTE_TABLE[note+transpose & 63];
+        int v1_c = voi1_ctrl;
+        int v1_p = voi1_ctrl;
+        int v1_a = voi1_ctrl;
+        int v1_s = voi1_ctrl;
+        
         // see which pulse generator is free
         if (!(chs & 1)) {
-          SID_PULSE_DECAY(v1, period);
+          SID_PULSE1_DECAY(v1, period);
           voi1pos = 7;
           chs |= 1;
         } else if (!(chs & 2)) {
-          SID_PULSE_DECAY(v2, period);
+          SID_PULSE2_DECAY(v2, period);
           voi2pos = 7;
           chs |= 2;
         } else if (!(chs & 4)) {
-          SID_PULSE_DECAY(v3, period);
+          SID_PULSE3_DECAY(v3, period);
           voi3pos = 7;
           chs |= 4;
         }
@@ -181,15 +217,6 @@ void play_music() {
     }
     cur_duration--;
   }
-}
-
-void start_music(const byte* music) {
-  SID_PULSE_DECAY(v1, 0);
-  SID_PULSE_DECAY(v2, 0);
-  SID_PULSE_DECAY(v3, 0);
-  playing_track = music_index;
-  music_ptr = music;
-  cur_duration = 0;
 }
 
 void type_message(void) {
@@ -300,6 +327,61 @@ void type_message(void) {
   printf("*");
 }
 
+void fix_data() {
+  gotoxy(9, 2);
+  printf("%02X", music_index);
+  gotoxy(14, 3);
+  printf("%02X", transpose);
+  gotoxy(20, 4);
+  printf("%02X", voi1_ctrl);
+  gotoxy(15, 5);
+  printf("%02X", voi1_pw);
+  gotoxy(15, 6);
+  printf("%02X", voi1_ad);
+  gotoxy(15, 7);
+  printf("%02X", voi1_sr);
+  gotoxy(20, 8);;
+  printf("%02X", voi2_ctrl);
+  gotoxy(15, 9);;
+  printf("%02X", voi2_pw);
+  gotoxy(15, 10);;
+  printf("%02X", voi2_ad);
+  gotoxy(15, 11);
+  printf("%02X", voi2_sr);
+  gotoxy(20, 12);
+  printf("%02X", voi3_ctrl);
+  gotoxy(15, 13);
+  printf("%02X", voi3_pw);
+  gotoxy(15, 14);
+  printf("%02X", voi3_ad);
+  gotoxy(15, 15);
+  printf("%02X", voi3_sr);
+}
+
+void start_music(const byte* music) {
+  transpose = transpose_tables[music_index];
+  voi1_ctrl = voi1_ctrl_tables[music_index];
+  voi1_pw = voi1_pw_tables[music_index];
+  voi1_ad = voi1_ad_tables[music_index];
+  voi1_sr = voi1_sr_tables[music_index];
+  voi2_ctrl = voi2_ctrl_tables[music_index];
+  voi2_pw = voi2_pw_tables[music_index];
+  voi2_ad = voi2_ad_tables[music_index];
+  voi2_sr = voi2_sr_tables[music_index];
+  voi3_ctrl = voi3_ctrl_tables[music_index];
+  voi3_pw = voi3_pw_tables[music_index];
+  voi3_ad = voi3_ad_tables[music_index];
+  voi3_sr = voi3_sr_tables[music_index];
+  fix_data();
+  
+  SID_PULSE1_DECAY(v1, 0);
+  SID_PULSE2_DECAY(v2, 0);
+  SID_PULSE3_DECAY(v3, 0);
+  playing_track = music_index;
+  music_ptr = music;
+  cur_duration = 0;
+}
+
 void update_menu(void) {
   char joy = joy_read(0);
   frames = frames + 1;
@@ -320,7 +402,7 @@ void update_menu(void) {
     frames = 0;
   }
   
-  if(JOY_LEFT(joy) && menu == 0 && frames >= 10){
+  if(JOY_LEFT(joy) && menu == 0 && music_index > 0 && frames >= 10){
     	music_index -= 1;
     	gotoxy(9, menu+2);
     	printf("%02X", music_index);
@@ -331,7 +413,7 @@ void update_menu(void) {
     	frames = 0;
    }
     
-  if(JOY_RIGHT(joy) && menu == 0 && frames >= 10){
+  if(JOY_RIGHT(joy) && menu == 0 && music_index < 19 && frames >= 10){
     	music_index += 1; 
     	gotoxy(9, menu+2);
     	printf("%02X", music_index);
@@ -353,6 +435,174 @@ void update_menu(void) {
     	transpose += 1; 
     	gotoxy(14, menu+2);
     	printf("%02X", transpose);
+    	frames = 0;
+   }
+  
+  if(JOY_LEFT(joy) && menu == 2 && frames >= 10){
+    	voi1_ctrl -= 1;
+    	gotoxy(20, menu+2);
+    	printf("%02X", voi1_ctrl);
+    	frames = 0;
+   }
+    
+  if(JOY_RIGHT(joy) && menu == 2 && frames >= 10){
+    	voi1_ctrl += 1; 
+    	gotoxy(20, menu+2);
+    	printf("%02X", voi1_ctrl);
+    	frames = 0;
+   }
+  
+  if(JOY_LEFT(joy) && menu == 3){
+    	voi1_pw -= 1;
+    	gotoxy(15, menu+2);
+    	printf("%02X", voi1_pw);
+    	frames = 0;
+   }
+    
+  if(JOY_RIGHT(joy) && menu == 3){
+    	voi1_pw += 1; 
+    	gotoxy(15, menu+2);
+    	printf("%02X", voi1_pw);
+    	frames = 0;
+   }
+  
+  if(JOY_LEFT(joy) && menu == 4){
+    	voi1_ad -= 1;
+    	gotoxy(15, menu+2);
+    	printf("%02X", voi1_ad);
+    	frames = 0;
+   }
+    
+  if(JOY_RIGHT(joy) && menu == 4){
+    	voi1_ad += 1; 
+    	gotoxy(15, menu+2);
+    	printf("%02X", voi1_ad);
+    	frames = 0;
+   }
+  
+  if(JOY_LEFT(joy) && menu == 5){
+    	voi1_sr -= 1;
+    	gotoxy(15, menu+2);
+    	printf("%02X", voi1_sr);
+    	frames = 0;
+   }
+    
+  if(JOY_RIGHT(joy) && menu == 5){
+    	voi1_sr += 1; 
+    	gotoxy(15, menu+2);
+    	printf("%02X", voi1_sr);
+    	frames = 0;
+   }
+  //VOICE 2
+  if(JOY_LEFT(joy) && menu == 6 && frames >= 10){
+    	voi2_ctrl -= 1;
+    	gotoxy(20, menu+2);
+    	printf("%02X", voi2_ctrl);
+    	frames = 0;
+   }
+    
+  if(JOY_RIGHT(joy) && menu == 6 && frames >= 10){
+    	voi2_ctrl += 1; 
+    	gotoxy(20, menu+2);
+    	printf("%02X", voi2_ctrl);
+    	frames = 0;
+   }
+  
+  if(JOY_LEFT(joy) && menu == 7){
+    	voi2_pw -= 1;
+    	gotoxy(15, menu+2);
+    	printf("%02X", voi2_pw);
+    	frames = 0;
+   }
+    
+  if(JOY_RIGHT(joy) && menu == 7){
+    	voi2_pw += 1; 
+    	gotoxy(15, menu+2);
+    	printf("%02X", voi2_pw);
+    	frames = 0;
+   }
+  
+  if(JOY_LEFT(joy) && menu == 8){
+    	voi2_ad -= 1;
+    	gotoxy(15, menu+2);
+    	printf("%02X", voi2_ad);
+    	frames = 0;
+   }
+    
+  if(JOY_RIGHT(joy) && menu == 8){
+    	voi2_ad += 1; 
+    	gotoxy(15, menu+2);
+    	printf("%02X", voi2_ad);
+    	frames = 0;
+   }
+  
+  if(JOY_LEFT(joy) && menu == 9){
+    	voi2_sr -= 1;
+    	gotoxy(15, menu+2);
+    	printf("%02X", voi2_sr);
+    	frames = 0;
+   }
+    
+  if(JOY_RIGHT(joy) && menu == 9){
+    	voi2_sr += 1; 
+    	gotoxy(15, menu+2);
+    	printf("%02X", voi2_sr);
+    	frames = 0;
+   }
+  //VOICE 3
+  if(JOY_LEFT(joy) && menu == 10 && frames >= 10){
+    	voi3_ctrl -= 1;
+    	gotoxy(20, menu+2);
+    	printf("%02X", voi3_ctrl);
+    	frames = 0;
+   }
+    
+  if(JOY_RIGHT(joy) && menu == 10 && frames >= 10){
+    	voi3_ctrl += 1; 
+    	gotoxy(20, menu+2);
+    	printf("%02X", voi3_ctrl);
+    	frames = 0;
+   }
+  
+  if(JOY_LEFT(joy) && menu == 11){
+    	voi3_pw -= 1;
+    	gotoxy(15, menu+2);
+    	printf("%02X", voi3_pw);
+    	frames = 0;
+   }
+    
+  if(JOY_RIGHT(joy) && menu == 11){
+    	voi3_pw += 1; 
+    	gotoxy(15, menu+2);
+    	printf("%02X", voi3_pw);
+    	frames = 0;
+   }
+  
+  if(JOY_LEFT(joy) && menu == 12){
+    	voi3_ad -= 1;
+    	gotoxy(15, menu+2);
+    	printf("%02X", voi3_ad);
+    	frames = 0;
+   }
+    
+  if(JOY_RIGHT(joy) && menu == 12){
+    	voi3_ad += 1; 
+    	gotoxy(15, menu+2);
+    	printf("%02X", voi3_ad);
+    	frames = 0;
+   }
+  
+  if(JOY_LEFT(joy) && menu == 13){
+    	voi3_sr -= 1;
+    	gotoxy(15, menu+2);
+    	printf("%02X", voi3_sr);
+    	frames = 0;
+   }
+    
+  if(JOY_RIGHT(joy) && menu == 13){
+    	voi3_sr += 1; 
+    	gotoxy(15, menu+2);
+    	printf("%02X", voi3_sr);
     	frames = 0;
    }
 }
